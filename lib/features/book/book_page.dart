@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
+import '../webview/webview_tab_page.dart';
 
 class NativeBookPage extends StatefulWidget {
   const NativeBookPage({
@@ -58,24 +59,22 @@ class _NativeBookPageState extends State<NativeBookPage> {
     final valid = _formKey.currentState?.validate() ?? false;
     if (!valid) return;
 
-    final fromLabel = _locations[_from] ?? _from!;
-    final toLabel = _locations[_to] ?? _to!;
-    final date =
-        '${_departureDate.day.toString().padLeft(2, '0')}/${_departureDate.month.toString().padLeft(2, '0')}/${_departureDate.year}';
+    final dateIso =
+        '${_departureDate.year.toString().padLeft(4, '0')}-${_departureDate.month.toString().padLeft(2, '0')}-${_departureDate.day.toString().padLeft(2, '0')}';
+    final uri = Uri.parse('https://www.louisline.co.tz/book').replace(
+      queryParameters: {
+        'dialog': '1',
+        'from': _from,
+        'to': _to,
+        'date': dateIso,
+        'passengers': '$_passengers',
+      },
+    );
 
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.t('bookTicket')),
-        content: Text(
-          '$fromLabel → $toLabel\n$date • $_passengers ${context.t('passengers')}\n\nYour booking request is ready. Please confirm through our call center or WhatsApp support.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            WebViewTabPage(title: context.t('bookTicket'), url: uri.toString()),
       ),
     );
   }
