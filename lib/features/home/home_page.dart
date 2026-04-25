@@ -61,55 +61,69 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverAppBar.large(
-          pinned: true,
-          expandedHeight: 250,
-          backgroundColor: AppTheme.darkBg,
-          foregroundColor: Colors.white,
-          flexibleSpace: FlexibleSpaceBar(
-            title: const Text('Louisline'),
-            background: Stack(
-              fit: StackFit.expand,
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
+            child: Column(
               children: [
-                Image.asset('assets/images/hero_4.jpeg', fit: BoxFit.cover),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0x55000000), Color(0xD90E1328)],
+                FadeSlideIn(
+                  child: SizedBox(
+                    height: 250,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset('assets/images/hero_4.jpeg', fit: BoxFit.cover),
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Color(0x52000000), Color(0xCC0E1328)],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _heroThumb('assets/images/hero_1.jpeg'),
+                                  const SizedBox(width: 8),
+                                  _heroThumb('assets/images/hero_2.jpeg'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
-            child: Column(
-              children: [
-                const FadeSlideIn(child: _HeroIntro()),
-                const SizedBox(height: 14),
-                FadeSlideIn(
-                  delay: const Duration(milliseconds: 90),
-                  child: _BookingNativeCard(
-                    formKey: _formKey,
-                    locations: _locations,
-                    from: _from,
-                    to: _to,
-                    passengers: _passengers,
-                    departureDate: _departureDate,
-                    onFromChanged: (value) => setState(() => _from = value),
-                    onToChanged: (value) => setState(() => _to = value),
-                    onDateTap: () => _pickDate(context),
-                    onPassengersChanged: (value) =>
-                        setState(() => _passengers = value),
-                    onContinue: _continueToBooking,
+                Transform.translate(
+                  offset: const Offset(0, -30),
+                  child: FadeSlideIn(
+                    delay: const Duration(milliseconds: 90),
+                    child: _BookingNativeCard(
+                      formKey: _formKey,
+                      locations: _locations,
+                      from: _from,
+                      to: _to,
+                      passengers: _passengers,
+                      departureDate: _departureDate,
+                      onFromChanged: (value) => setState(() => _from = value),
+                      onToChanged: (value) => setState(() => _to = value),
+                      onDateTap: () => _pickDate(context),
+                      onPassengersChanged: (value) =>
+                          setState(() => _passengers = value),
+                      onContinue: _continueToBooking,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 0),
                 FadeSlideIn(
                   delay: const Duration(milliseconds: 170),
                   child: _sectionHeader(
@@ -149,6 +163,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _heroThumb(String assetPath) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.asset(
+        assetPath,
+        width: 76,
+        height: 52,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
   Widget _sectionHeader(String title, String subtitle) {
     return Row(
       children: [
@@ -159,39 +185,6 @@ class _HomePageState extends State<HomePage> {
         const Spacer(),
         Text(subtitle, style: const TextStyle(color: Color(0xFF64748B))),
       ],
-    );
-  }
-}
-
-class _HeroIntro extends StatelessWidget {
-  const _HeroIntro();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0x1429388D), Color(0x14D91D27)],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0x3329388D)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.t('nativeBookingTitle'),
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            context.t('nativeBookingSub'),
-            style: const TextStyle(color: Color(0xFF475569), height: 1.35),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -230,10 +223,10 @@ class _BookingNativeCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: const [
           BoxShadow(
@@ -250,113 +243,139 @@ class _BookingNativeCard extends StatelessWidget {
           children: [
             Text(
               context.t('searchBookBus'),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               context.t('nativeHandoff'),
-              style: const TextStyle(color: Color(0xFF64748B)),
-            ),
-            const SizedBox(height: 14),
-            DropdownButtonFormField<String>(
-              initialValue: from,
-              decoration: _fieldDecoration(context.t('from')),
-              items: locations
-                  .map(
-                    (item) => DropdownMenuItem(value: item, child: Text(item)),
-                  )
-                  .toList(),
-              onChanged: onFromChanged,
-              validator: (value) =>
-                  value == null ? context.t('selectOrigin') : null,
+              style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
             ),
             const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              initialValue: to,
-              decoration: _fieldDecoration(context.t('to')),
-              items: locations
-                  .map(
-                    (item) => DropdownMenuItem(value: item, child: Text(item)),
-                  )
-                  .toList(),
-              onChanged: onToChanged,
-              validator: (value) {
-                if (value == null) {
-                  return context.t('selectDestination');
-                }
-                if (from != null && value == from) {
-                  return context.t('destinationDifferent');
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 10),
-            InkWell(
-              borderRadius: BorderRadius.circular(14),
-              onTap: onDateTap,
-              child: InputDecorator(
-                decoration: _fieldDecoration(context.t('departureDate')),
-                child: Row(
-                  children: [
-                    Text(
-                      dateLabel,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.calendar_month_outlined,
-                      color: AppTheme.brandBlue,
-                    ),
-                  ],
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: from,
+                    decoration: _fieldDecoration(context.t('from')),
+                    items: locations
+                        .map(
+                          (item) => DropdownMenuItem(value: item, child: Text(item)),
+                        )
+                        .toList(),
+                    onChanged: onFromChanged,
+                    validator: (value) =>
+                        value == null ? context.t('selectOrigin') : null,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            InputDecorator(
-              decoration: _fieldDecoration(context.t('passengers')),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: passengers > 1
-                        ? () => onPassengersChanged(passengers - 1)
-                        : null,
-                    icon: const Icon(Icons.remove_circle_outline),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: to,
+                    decoration: _fieldDecoration(context.t('to')),
+                    items: locations
+                        .map(
+                          (item) => DropdownMenuItem(value: item, child: Text(item)),
+                        )
+                        .toList(),
+                    onChanged: onToChanged,
+                    validator: (value) {
+                      if (value == null) {
+                        return context.t('selectDestination');
+                      }
+                      if (from != null && value == from) {
+                        return context.t('destinationDifferent');
+                      }
+                      return null;
+                    },
                   ),
-                  Text(
-                    '$passengers',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: onDateTap,
+                    child: InputDecorator(
+                      decoration: _fieldDecoration(context.t('departureDate')),
+                      child: Row(
+                        children: [
+                          Text(
+                            dateLabel,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            Icons.calendar_month_outlined,
+                            size: 18,
+                            color: AppTheme.brandBlue,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: passengers < 8
-                        ? () => onPassengersChanged(passengers + 1)
-                        : null,
-                    icon: const Icon(Icons.add_circle_outline),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InputDecorator(
+                    decoration: _fieldDecoration(context.t('passengers')),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: passengers > 1
+                              ? () => onPassengersChanged(passengers - 1)
+                              : null,
+                          child: Icon(
+                            Icons.remove_circle_outline,
+                            size: 20,
+                            color: passengers > 1
+                                ? AppTheme.brandBlue
+                                : const Color(0xFF94A3B8),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$passengers',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        InkWell(
+                          onTap: passengers < 8
+                              ? () => onPassengersChanged(passengers + 1)
+                              : null,
+                          child: Icon(
+                            Icons.add_circle_outline,
+                            size: 20,
+                            color: passengers < 8
+                                ? AppTheme.brandBlue
+                                : const Color(0xFF94A3B8),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
-                  Text(
-                    context.t('seatCount'),
-                    style: const TextStyle(color: Color(0xFF64748B)),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
                 style: FilledButton.styleFrom(
                   backgroundColor: AppTheme.brandAmber,
                   foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   textStyle: const TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 onPressed: onContinue,
@@ -376,18 +395,18 @@ class _BookingNativeCard extends StatelessWidget {
       filled: true,
       fillColor: const Color(0xFFF8FAFC),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppTheme.brandBlue, width: 1.4),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
     );
   }
 }
