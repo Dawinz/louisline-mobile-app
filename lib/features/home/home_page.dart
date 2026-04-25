@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 FadeSlideIn(
                   child: SizedBox(
-                    height: 250,
+                    height: 280,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(18),
                       child: Stack(
@@ -89,16 +89,27 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topRight,
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
                             child: Padding(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  _heroThumb('assets/images/hero_1.jpeg'),
-                                  const SizedBox(width: 8),
-                                  _heroThumb('assets/images/hero_2.jpeg'),
+                                  Expanded(
+                                    child: _heroThumb(
+                                      'assets/images/hero_1.jpeg',
+                                      height: 118,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: _heroThumb(
+                                      'assets/images/hero_2.jpeg',
+                                      height: 118,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -168,14 +179,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _heroThumb(String assetPath) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.asset(
-        assetPath,
-        width: 76,
-        height: 52,
-        fit: BoxFit.cover,
+  Widget _heroThumb(String assetPath, {required double height}) {
+    return Material(
+      elevation: 6,
+      shadowColor: Colors.black54,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: Clip.antiAlias,
+      child: SizedBox(
+        width: double.infinity,
+        height: height,
+        child: Image.asset(assetPath, fit: BoxFit.cover),
       ),
     );
   }
@@ -287,14 +300,37 @@ class _BookingNativeCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
+                    isDense: true,
                     initialValue: from,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
+                    ),
+                    icon: const Icon(Icons.expand_more, size: 22),
                     decoration: _fieldDecoration(context.t('from')),
+                    selectedItemBuilder: (context) => locations.entries
+                        .map(
+                          (entry) => Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              entry.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )
+                        .toList(),
                     items: locations
                         .entries
                         .map(
                           (entry) => DropdownMenuItem(
                             value: entry.key,
-                            child: Text(entry.value),
+                            child: Text(
+                              entry.value,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         )
                         .toList(),
@@ -303,17 +339,40 @@ class _BookingNativeCard extends StatelessWidget {
                         value == null ? context.t('selectOrigin') : null,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Expanded(
                   child: DropdownButtonFormField<String>(
+                    isDense: true,
                     initialValue: to,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
+                    ),
+                    icon: const Icon(Icons.expand_more, size: 22),
                     decoration: _fieldDecoration(context.t('to')),
+                    selectedItemBuilder: (context) => locations.entries
+                        .map(
+                          (entry) => Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              entry.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )
+                        .toList(),
                     items: locations
                         .entries
                         .map(
                           (entry) => DropdownMenuItem(
                             value: entry.key,
-                            child: Text(entry.value),
+                            child: Text(
+                              entry.value,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         )
                         .toList(),
@@ -357,7 +416,7 @@ class _BookingNativeCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Expanded(
                   child: InputDecorator(
                     decoration: _fieldDecoration(context.t('passengers')),
@@ -446,7 +505,8 @@ class _BookingNativeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppTheme.brandBlue, width: 1.4),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      isDense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     );
   }
 }
