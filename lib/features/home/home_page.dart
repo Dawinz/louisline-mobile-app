@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> {
 
     final uri = Uri.parse('https://www.louisline.co.tz/book').replace(
       queryParameters: {
+        'dialog': '1',
         'from': _from,
         'to': _to,
         'date': date,
