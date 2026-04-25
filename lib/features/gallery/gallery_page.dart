@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/fade_slide_in.dart';
 
@@ -17,7 +18,7 @@ class GalleryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gallery'),
+        title: Text(context.t('gallery')),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(

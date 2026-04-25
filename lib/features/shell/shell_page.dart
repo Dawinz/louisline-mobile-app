@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../contact/contact_page.dart';
 import '../gallery/gallery_page.dart';
 import '../home/home_page.dart';
+import '../../localization/app_text.dart';
 import '../routes/routes_page.dart';
 import '../webview/webview_tab_page.dart';
 import '../../theme/app_theme.dart';
@@ -17,44 +18,44 @@ class ShellPage extends StatefulWidget {
 class _ShellPageState extends State<ShellPage> {
   int _index = 0;
 
-  static final List<_ShellTab> _tabs = [
-    const _ShellTab(
-      label: 'Home',
-      icon: Icons.home_outlined,
-      selectedIcon: Icons.home,
-      page: HomePage(),
-    ),
-    const _ShellTab(
-      label: 'Routes',
-      icon: Icons.alt_route_outlined,
-      selectedIcon: Icons.alt_route,
-      page: RoutesPage(),
-    ),
-    const _ShellTab(
-      label: 'Book',
-      icon: Icons.event_seat_outlined,
-      selectedIcon: Icons.event_seat,
-      page: WebViewTabPage(
-        title: 'Book Ticket',
-        url: 'https://www.louisline.co.tz/book',
-      ),
-    ),
-    const _ShellTab(
-      label: 'Gallery',
-      icon: Icons.photo_library_outlined,
-      selectedIcon: Icons.photo_library,
-      page: GalleryPage(),
-    ),
-    const _ShellTab(
-      label: 'Contact',
-      icon: Icons.support_agent_outlined,
-      selectedIcon: Icons.support_agent,
-      page: ContactPage(),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      _ShellTab(
+        label: context.t('home'),
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home,
+        page: const HomePage(),
+      ),
+      _ShellTab(
+        label: context.t('routes'),
+        icon: Icons.alt_route_outlined,
+        selectedIcon: Icons.alt_route,
+        page: const RoutesPage(),
+      ),
+      _ShellTab(
+        label: context.t('book'),
+        icon: Icons.event_seat_outlined,
+        selectedIcon: Icons.event_seat,
+        page: WebViewTabPage(
+          title: context.t('bookTicket'),
+          url: 'https://www.louisline.co.tz/book',
+        ),
+      ),
+      _ShellTab(
+        label: context.t('gallery'),
+        icon: Icons.photo_library_outlined,
+        selectedIcon: Icons.photo_library,
+        page: const GalleryPage(),
+      ),
+      _ShellTab(
+        label: context.t('contact'),
+        icon: Icons.support_agent_outlined,
+        selectedIcon: Icons.support_agent,
+        page: const ContactPage(),
+      ),
+    ];
+
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 450),
@@ -70,7 +71,22 @@ class _ShellPageState extends State<ShellPage> {
             child: SlideTransition(position: slide, child: child),
           );
         },
-        child: KeyedSubtree(key: ValueKey(_index), child: _tabs[_index].page),
+        child: KeyedSubtree(key: ValueKey(_index), child: tabs[_index].page),
+      ),
+      floatingActionButton: PopupMenuButton<AppLanguage>(
+        tooltip: context.t('language'),
+        icon: const Icon(Icons.language_rounded),
+        onSelected: (value) => LocaleScope.of(context).setLanguage(value),
+        itemBuilder: (context) => const [
+          PopupMenuItem(
+            value: AppLanguage.en,
+            child: Text('English'),
+          ),
+          PopupMenuItem(
+            value: AppLanguage.sw,
+            child: Text('Kiswahili'),
+          ),
+        ],
       ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -87,7 +103,7 @@ class _ShellPageState extends State<ShellPage> {
         child: NavigationBar(
           selectedIndex: _index,
           onDestinationSelected: (value) => setState(() => _index = value),
-          destinations: _tabs
+          destinations: tabs
               .map(
                 (tab) => NavigationDestination(
                   icon: Icon(tab.icon),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
 
 class WebViewTabPage extends StatefulWidget {
@@ -62,7 +63,7 @@ class _WebViewTabPageState extends State<WebViewTabPage>
         ),
         actions: [
           IconButton(
-            tooltip: 'Refresh',
+            tooltip: context.t('refresh'),
             onPressed: () => _controller.reload(),
             icon: const Icon(Icons.refresh_rounded),
           ),

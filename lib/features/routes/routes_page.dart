@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/fade_slide_in.dart';
 
@@ -19,7 +20,7 @@ class RoutesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Routes'),
+        title: Text(context.t('routes')),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -50,9 +51,7 @@ class RoutesPage extends StatelessWidget {
                   routes[index],
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
-                subtitle: const Text(
-                  'Daily schedule and premium comfort service.',
-                ),
+                subtitle: Text(context.t('routesSub')),
               ),
             ),
           );

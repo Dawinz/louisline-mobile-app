@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/fade_slide_in.dart';
 import '../webview/webview_tab_page.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) =>
-            WebViewTabPage(title: 'Book Ticket', url: uri.toString()),
+            WebViewTabPage(title: context.t('bookTicket'), url: uri.toString()),
       ),
     );
   }
@@ -112,8 +113,8 @@ class _HomePageState extends State<HomePage> {
                 FadeSlideIn(
                   delay: const Duration(milliseconds: 170),
                   child: _sectionHeader(
-                    'Why Louisline',
-                    'Premium local experience',
+                    context.t('whyLouisline'),
+                    context.t('premiumLocal'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -128,14 +129,14 @@ class _HomePageState extends State<HomePage> {
                         Icons.speed_outlined,
                       ][index],
                       title: [
-                        'Safe & Trusted',
-                        'Comfortable Coaches',
-                        'Fast Booking',
+                        context.t('safeTrusted'),
+                        context.t('comfortableCoaches'),
+                        context.t('fastBooking'),
                       ][index],
                       subtitle: [
-                        'Experienced drivers and reliable route planning.',
-                        'Clean interiors and relaxing seat space.',
-                        'Book in seconds and continue in secure flow.',
+                        context.t('safeTrustedSub'),
+                        context.t('comfortableCoachesSub'),
+                        context.t('fastBookingSub'),
                       ][index],
                     ),
                   ),
@@ -177,17 +178,17 @@ class _HeroIntro extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: const Color(0x3329388D)),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Native booking experience',
-            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+            context.t('nativeBookingTitle'),
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
-            'Choose route and date here, then continue to secure ticket booking.',
-            style: TextStyle(color: Color(0xFF475569), height: 1.35),
+            context.t('nativeBookingSub'),
+            style: const TextStyle(color: Color(0xFF475569), height: 1.35),
           ),
         ],
       ),
@@ -247,31 +248,32 @@ class _BookingNativeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Search and book your bus',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            Text(
+              context.t('searchBookBus'),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Styled natively for speed, then handoff to secure booking.',
-              style: TextStyle(color: Color(0xFF64748B)),
+            Text(
+              context.t('nativeHandoff'),
+              style: const TextStyle(color: Color(0xFF64748B)),
             ),
             const SizedBox(height: 14),
             DropdownButtonFormField<String>(
               initialValue: from,
-              decoration: _fieldDecoration('From'),
+              decoration: _fieldDecoration(context.t('from')),
               items: locations
                   .map(
                     (item) => DropdownMenuItem(value: item, child: Text(item)),
                   )
                   .toList(),
               onChanged: onFromChanged,
-              validator: (value) => value == null ? 'Select origin' : null,
+              validator: (value) =>
+                  value == null ? context.t('selectOrigin') : null,
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               initialValue: to,
-              decoration: _fieldDecoration('To'),
+              decoration: _fieldDecoration(context.t('to')),
               items: locations
                   .map(
                     (item) => DropdownMenuItem(value: item, child: Text(item)),
@@ -280,10 +282,10 @@ class _BookingNativeCard extends StatelessWidget {
               onChanged: onToChanged,
               validator: (value) {
                 if (value == null) {
-                  return 'Select destination';
+                  return context.t('selectDestination');
                 }
                 if (from != null && value == from) {
-                  return 'Destination must be different';
+                  return context.t('destinationDifferent');
                 }
                 return null;
               },
@@ -293,7 +295,7 @@ class _BookingNativeCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               onTap: onDateTap,
               child: InputDecorator(
-                decoration: _fieldDecoration('Departure date'),
+                decoration: _fieldDecoration(context.t('departureDate')),
                 child: Row(
                   children: [
                     Text(
@@ -311,7 +313,7 @@ class _BookingNativeCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             InputDecorator(
-              decoration: _fieldDecoration('Passengers'),
+              decoration: _fieldDecoration(context.t('passengers')),
               child: Row(
                 children: [
                   IconButton(
@@ -334,9 +336,9 @@ class _BookingNativeCard extends StatelessWidget {
                     icon: const Icon(Icons.add_circle_outline),
                   ),
                   const Spacer(),
-                  const Text(
-                    'Seat count',
-                    style: TextStyle(color: Color(0xFF64748B)),
+                  Text(
+                    context.t('seatCount'),
+                    style: const TextStyle(color: Color(0xFF64748B)),
                   ),
                 ],
               ),
@@ -359,7 +361,7 @@ class _BookingNativeCard extends StatelessWidget {
                 ),
                 onPressed: onContinue,
                 icon: const Icon(Icons.arrow_forward_rounded),
-                label: const Text('Continue to Booking'),
+                label: Text(context.t('continueBooking')),
               ),
             ),
           ],

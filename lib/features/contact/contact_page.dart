@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/fade_slide_in.dart';
 
@@ -10,7 +11,7 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact'),
+        title: Text(context.t('contact')),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -22,30 +23,30 @@ class ContactPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
-          children: const [
-            FadeSlideIn(child: _ContactHero()),
+          children: [
+            const FadeSlideIn(child: _ContactHero()),
             SizedBox(height: 14),
             FadeSlideIn(
-              delay: Duration(milliseconds: 120),
+              delay: const Duration(milliseconds: 120),
               child: _ContactTile(
                 icon: Icons.place_outlined,
-                title: 'Address',
+                title: context.t('address'),
                 value: 'Urafiki, Dar es Salaam, Tanzania',
               ),
             ),
             FadeSlideIn(
-              delay: Duration(milliseconds: 180),
+              delay: const Duration(milliseconds: 180),
               child: _ContactTile(
                 icon: Icons.phone_outlined,
-                title: 'Mobile',
+                title: context.t('mobile'),
                 value: '0683 300 100, 0798 700 700',
               ),
             ),
             FadeSlideIn(
-              delay: Duration(milliseconds: 240),
+              delay: const Duration(milliseconds: 240),
               child: _ContactTile(
                 icon: Icons.chat_outlined,
-                title: 'WhatsApp',
+                title: context.t('whatsapp'),
                 value: '0683 300 100',
               ),
             ),
@@ -70,9 +71,9 @@ class _ContactHero extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Text(
-        'Need assistance? Our support team is available daily for booking and route inquiries.',
-        style: TextStyle(
+      child: Text(
+        context.t('contactHero'),
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 16,
           height: 1.4,
