@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../book/book_page.dart';
 import '../contact/contact_page.dart';
 import '../gallery/gallery_page.dart';
 import '../home/home_page.dart';
 import '../../localization/app_text.dart';
 import '../routes/routes_page.dart';
-import '../webview/webview_tab_page.dart';
 import '../../theme/app_theme.dart';
 
 class ShellPage extends StatefulWidget {
@@ -37,10 +37,7 @@ class _ShellPageState extends State<ShellPage> {
         label: context.t('book'),
         icon: Icons.event_seat_outlined,
         selectedIcon: Icons.event_seat,
-        page: WebViewTabPage(
-          title: context.t('bookTicket'),
-          url: 'https://www.louisline.co.tz/book',
-        ),
+        page: const NativeBookPage(),
       ),
       _ShellTab(
         label: context.t('gallery'),
