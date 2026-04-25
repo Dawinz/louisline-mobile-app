@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../localization/app_text.dart';
 import '../../theme/app_theme.dart';
+import '../webview/webview_tab_page.dart';
 
 class NativeBookPage extends StatefulWidget {
   const NativeBookPage({
@@ -59,30 +59,24 @@ class _NativeBookPageState extends State<NativeBookPage> {
     final valid = _formKey.currentState?.validate() ?? false;
     if (!valid) return;
 
-    final fromLabel = _locations[_from] ?? _from!;
-    final toLabel = _locations[_to] ?? _to!;
     final dateIso =
         '${_departureDate.year.toString().padLeft(4, '0')}-${_departureDate.month.toString().padLeft(2, '0')}-${_departureDate.day.toString().padLeft(2, '0')}';
-    final message = Uri.encodeComponent(
-      'Hello Louisline, I want to book a trip.\n'
-      'From: $fromLabel ($_from)\n'
-      'To: $toLabel ($_to)\n'
-      'Date: $dateIso\n'
-      'Passengers: $_passengers',
+    final uri = Uri.parse('https://www.louisline.co.tz/book').replace(
+      queryParameters: {
+        'dialog': '1',
+        'from': _from,
+        'to': _to,
+        'date': dateIso,
+        'passengers': '$_passengers',
+      },
     );
-    final uri = Uri.parse('https://wa.me/255683300100?text=$message');
-    _openWhatsApp(uri);
-  }
 
-  Future<void> _openWhatsApp(Uri uri) async {
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!opened && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not open WhatsApp. Please install WhatsApp and try again.'),
-        ),
-      );
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            WebViewTabPage(title: context.t('bookTicket'), url: uri.toString()),
+      ),
+    );
   }
 
   @override
