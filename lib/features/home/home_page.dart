@@ -13,7 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const _locations = ['Dar es Salaam', 'Morogoro', 'Ifakara', 'Malinyi'];
+  static const _locations = {
+    'DAR': 'Dar es Salaam',
+    'MOROGORO': 'Morogoro',
+    'IFAKARA': 'Ifakara',
+    'MALINYI': 'Malinyi',
+  };
 
   final _formKey = GlobalKey<FormState>();
   String? _from;
@@ -176,15 +181,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _sectionHeader(String title, String subtitle) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
-        ),
-        const Spacer(),
-        Text(subtitle, style: const TextStyle(color: Color(0xFF64748B))),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 360;
+        if (isNarrow) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 2),
+              Text(subtitle, style: const TextStyle(color: Color(0xFF64748B))),
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Color(0xFF64748B)),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -205,7 +237,7 @@ class _BookingNativeCard extends StatelessWidget {
   });
 
   final GlobalKey<FormState> formKey;
-  final List<String> locations;
+  final Map<String, String> locations;
   final String? from;
   final String? to;
   final int passengers;
@@ -258,8 +290,12 @@ class _BookingNativeCard extends StatelessWidget {
                     initialValue: from,
                     decoration: _fieldDecoration(context.t('from')),
                     items: locations
+                        .entries
                         .map(
-                          (item) => DropdownMenuItem(value: item, child: Text(item)),
+                          (entry) => DropdownMenuItem(
+                            value: entry.key,
+                            child: Text(entry.value),
+                          ),
                         )
                         .toList(),
                     onChanged: onFromChanged,
@@ -273,8 +309,12 @@ class _BookingNativeCard extends StatelessWidget {
                     initialValue: to,
                     decoration: _fieldDecoration(context.t('to')),
                     items: locations
+                        .entries
                         .map(
-                          (item) => DropdownMenuItem(value: item, child: Text(item)),
+                          (entry) => DropdownMenuItem(
+                            value: entry.key,
+                            child: Text(entry.value),
+                          ),
                         )
                         .toList(),
                     onChanged: onToChanged,
